@@ -1,14 +1,25 @@
-#!/usr/bin/env bash
-# This script transfers a file to a server using Secure Copy (SCP)
-
-if [[ $# -ne 4 ]]; then
-    echo "$0 PATH_TO_FILE IP USERNAME PATH_TO_SSH_KEY"
-    exit 1
+hecking for command-line argument
+if [ $# -lt 4 ]
+then
+  echo "Usage: 0-transfer_file PATH_TO_FILE IP USERNAME PATH_TO_SSH_KEY"
+  exit 1
 fi
 
-file_path=$1
-ip_address=$2
-user=$3
-ssh_key=$4
+# Assigning Arguments to variables
 
-scp -o StrictHostKeyChecking=off -i "$ssh_key" "$file_path" "$user@$ip_address:/home/$user/"
+path_to_file=$1
+ip=$2
+username=$3
+path_to_ssh_key=$4
+
+
+# Disabbling Strict Host Key checking
+scp -o "StrictHostKeyChecking no" -i "$path_to_ssh_key" "$path_to_file" "$username@$ip:~/"
+
+# Checking if the transfer was successful
+if [ $? -eq 0 ]
+then
+  echo "FILE TRANSFER WAS SUCCESSFULL"
+else
+  echo "FILE TRANSFER FAILED"
+fi
